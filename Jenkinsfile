@@ -4,8 +4,14 @@ pipeline {
 stages {
 	stage('Checkout') {
 		steps {
-			git url: 'https://github.com/your-username/sast-demo-app.git', branch:'master'
-		}
+                	checkout([$class: 'GitSCM',
+                	branches: [[name: '*/main']],
+                	userRemoteConfigs: [[
+                        	url: 'https://github.com/Kyne21/sast-demo-app.git',
+                        	credentialsId: 'github-token' // Menggunakan GitHub Token yang sudah ditambahkan di Jenkins Credentials
+                    	]]
+                	])
+            	}
 	}
 	stage('Install Dependencies') {
 		steps {
