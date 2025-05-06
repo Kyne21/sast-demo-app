@@ -27,10 +27,8 @@ pipeline {
         stage('SAST Analysis') {
             steps {
                 script {
-                    // Set PATH and run Bandit
                     sh 'export PATH=$PATH:/var/lib/jenkins/.local/bin && bandit -f xml -o bandit-output.xml -r . || true'
                     
-                    // Check if bandit-output.xml exists and is not empty
                     if (fileExists('bandit-output.xml') && sh(script: 'test -s bandit-output.xml', returnStatus: true) == 0) {
                         recordIssues tools: [bandit(pattern: 'bandit-output.xml')], ignoreQualityGate: true
                     } else {
