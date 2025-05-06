@@ -20,7 +20,6 @@ pipeline {
             steps {
                 script {
                     sh 'pip install bandit'
-                    sh 'which bandit'
                 }
             }
         }
@@ -28,12 +27,7 @@ pipeline {
         stage('SAST Analysis') {
             steps {
                 script {
-                    sh '''
-                    BANDIT_PATH=$(which bandit)
-                    if [ -n "$BANDIT_PATH" ]; then
-                        export PATH=$PATH:$(dirname $BANDIT_PATH)
-                    fi
-                    '''
+                    sh 'export PATH=$PATH:/var/lib/jenkins/.local/bin'
                     sh 'bandit -f xml -o bandit-output.xml -r . || true'
                 }
                 recordIssues tools: [bandit(pattern: 'bandit-output.xml')]
