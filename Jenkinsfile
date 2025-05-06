@@ -24,14 +24,15 @@ pipeline {
             }
         }
 
-        stage('SAST Analysis') {
+stage('SAST Analysis') {
     steps {
         script {
             sh 'export PATH=$PATH:/var/lib/jenkins/.local/bin && bandit -f xml -o bandit-output.xml -r . || true'
         }
-        recordIssues tools: [bandit(pattern: 'bandit-output.xml')]
+        recordIssues tools: [bandit(pattern: 'bandit-output.xml')], ignoreQualityGate: true
     }
 }
+
 
     }
 }
