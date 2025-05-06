@@ -18,7 +18,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'sudo apt install python3-bandit'
+                sh 'pip install bandit'
             }
         }
 
