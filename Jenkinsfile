@@ -18,13 +18,24 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install bandit'
+                script {
+                    sh 'pip install bandit'
+                    sh 'which bandit'
+                }
             }
         }
 
         stage('SAST Analysis') {
             steps {
-                sh 'bandit -f xml -o bandit-output.xml -r . || true'
+                script {
+                    sh '''
+                    BANDIT_PATH=$(which bandit)
+                    if [ -n "$BANDIT_PATH" ]; then
+                        export PATH=$PATH:$(dirname $BANDIT_PATH)
+                    fi
+                    '''
+                    sh 'bandit -f xml -o bandit-output.xml -r . || true'
+                }
                 recordIssues tools: [bandit(pattern: 'bandit-output.xml')]
             }
         }
