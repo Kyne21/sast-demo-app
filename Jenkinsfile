@@ -25,13 +25,13 @@ pipeline {
         }
 
         stage('SAST Analysis') {
-            steps {
-                script {
-                    sh 'export PATH=$PATH:/var/lib/jenkins/.local/bin'
-                    sh 'bandit -f xml -o bandit-output.xml -r . || true'
-                }
-                recordIssues tools: [bandit(pattern: 'bandit-output.xml')]
-            }
+    steps {
+        script {
+            sh 'export PATH=$PATH:/var/lib/jenkins/.local/bin && bandit -f xml -o bandit-output.xml -r . || true'
         }
+        recordIssues tools: [bandit(pattern: 'bandit-output.xml')]
+    }
+}
+
     }
 }
